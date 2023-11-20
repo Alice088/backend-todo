@@ -25,7 +25,10 @@ app.post("/createUser", (req, res) => {
     connection.query(
       `INSERT INTO users (nickname,password, email) VALUES (?, ?, ?)`,
       [user.nickname, user.password, user.email],
-      sqlErr => { if(sqlErr) throw sqlErr });
+      sqlErr => {
+        if(sqlErr) throw sqlErr
+        else res.status(200)
+      });
 });
 
 app.get("/getUser/:userID", (req, res) => {
@@ -45,7 +48,19 @@ app.put("/updateNickname/:userID/:newNickname", (req, res) => {
   connection.query(
     `UPDATE users SET nickname = ? WHERE id = ?`,
     [user.newNickname, user.userID],
-    sqlErr => { if(sqlErr) throw sqlErr });
+    sqlErr => {
+      if(sqlErr) throw sqlErr
+      else res.status(200)
+    });
+})
+
+app.delete("/deleteUser/:userID", (req, res) => {
+  const user = req.params;
+
+  connection.query("DELETE FROM users WHERE id = ?", [user.userID], sqlErr => {
+    if(sqlErr) throw sqlErr
+    else res.status(200)
+  })
 })
 
 connection.connect(err => {
