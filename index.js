@@ -19,10 +19,12 @@ app.get("/users",  (req, res) => {
 app.post("/createUser", (req, res) => {
     const user = {...req.body};
 
-    connection.query(
-      `INSERT INTO users (nickname,password, email) VALUES (?, ?, ?)`,
-      [user.nickname, user.password, user.email],
-      sqlErr => { if(sqlErr) throw sqlErr });
+    res.json({ reqBody: user })
+
+    // connection.query(
+    //   `INSERT INTO users (nickname,password, email) VALUES (?, ?, ?)`,
+    //   [user.nickname, user.password, user.email],
+    //   sqlErr => { if(sqlErr) throw sqlErr });
 });
 
 const port = process.env.PORT || 3000;
