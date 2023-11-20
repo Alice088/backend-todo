@@ -10,7 +10,7 @@ app.get("/users",  (req, res) => {
     connection.query("SELECT * FROM users", (sqlErr, sqlRes) => {
         if(sqlErr) res.status(500).json( { message: "Something went wrong!", error: sqlErr } );
         else {
-          res.send(sqlRes);
+          res.json({ data: sqlRes });
           res.status(200);
         }
     })
