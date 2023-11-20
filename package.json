@@ -1,5 +1,5 @@
 {
-  "name": "express-simple",
+  "name": "backend-todo",
   "version": "1.0.0",
   "description": "a simple expressjs app",
   "main": "index.js",

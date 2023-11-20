@@ -24,8 +24,8 @@ app.post("/createUser", (req, res) => {
       `INSERT INTO users (nickname,password, email) VALUES (?, ?, ?)`,
       [user.nickname, user.password, user.email],
       sqlErr => {
-        if(sqlErr) throw sqlErr
-        else res.status(200)
+        if(sqlErr) res.status(500).json( { message: "Something went wrong" } )
+        else res.json({ message: "Successfully" })
       });
 });
 
@@ -47,8 +47,11 @@ app.patch("/updateNickname/:userID/:newNickname", (req, res) => {
     `UPDATE users SET nickname = ? WHERE id = ?`,
     [user.newNickname, user.userID],
     sqlErr => {
-      if(sqlErr) throw sqlErr
-      else res.status(200)
+      if(sqlErr) {
+        res.json({ message: "Something went wrong" })
+        throw sqlErr
+      }
+      else res.json({ message: "successfully" })
     });
 })
 
@@ -56,8 +59,11 @@ app.delete("/deleteUser/:userID", (req, res) => {
   const user = req.params;
 
   connection.query("DELETE FROM users WHERE id = ?", [user.userID], sqlErr => {
-    if(sqlErr) throw sqlErr
-    else res.status(200)
+    if(sqlErr) {
+      res.json({ message: "Something went wrong" })
+      throw sqlErr
+    }
+    else res.json({ message: "successfully" })
   })
 })
 
