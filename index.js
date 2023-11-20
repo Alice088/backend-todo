@@ -28,14 +28,14 @@ app.post("/createUser", (req, res) => {
       sqlErr => { if(sqlErr) throw sqlErr });
 });
 
-app.post("/getUser", (req, res) => {
-    const user = {...req.body};
+app.get("/getUser/:userID", (req, res) => {
+    const user = req.params;
 
     connection.query(
-      `SELECT * FROM users WHERE id = ${user.id}`,
+      `SELECT * FROM users WHERE id = ${user.userID}`,
       (sqlErr, sqlRes) => {
           if(sqlErr) res.status(404).json( { message: "User not found" } )
-          else res.send(sqlRes).json();
+          else res.json({ data: sqlRes })
       });
 });
 
