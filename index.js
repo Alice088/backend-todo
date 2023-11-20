@@ -17,7 +17,7 @@ app.get("/users",  (req, res) => {
 });
 
 app.post("/createUser", (req, res) => {
-    const user = {...req.body};
+    const user = {...req.query};
 
     res.send({ reqBody: user }).json()
     console.log(user);
