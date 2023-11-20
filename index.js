@@ -6,8 +6,14 @@ app.get('/', (req, res) => {
     res.send('Choo Choo! Welcome to your Express app 🚅');
 })
 
-app.get("/json", (req, res) => {
-    res.json({"Choo Choo": "Welcome to your Express app 🚅"});
+app.get("/users",  (req, res) => {
+    connection.query("SELECT * FROM users", (sqlErr, sqlRes) => {
+        if(sqlErr) res.status(500).json( { message: "Something went wrong!", error: sqlErr } );
+        else {
+          res.send(sqlRes);
+          res.status(200);
+        }
+    })
 })
 
 const port = process.env.PORT || 3000;
