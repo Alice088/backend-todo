@@ -35,7 +35,7 @@ app.post("/getUser", (req, res) => {
       `SELECT * FROM users WHERE id = ${user.id}`,
       (sqlErr, sqlRes) => {
           if(sqlErr) res.status(404).json( { message: "User not found" } )
-          else res.send(sqlRes);
+          else res.send(sqlRes).json();
       });
 });
 
