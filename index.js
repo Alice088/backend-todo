@@ -14,7 +14,16 @@ app.get("/users",  (req, res) => {
           res.status(200);
         }
     })
-})
+});
+
+app.post("/createUser", (req, res) => {
+    const user = {...req.body};
+
+    connection.query(
+      `INSERT INTO users (nickname,password, email) VALUES (?, ?, ?)`,
+      [user.nickname, user.password, user.email],
+      sqlErr => { if(sqlErr) throw sqlErr });
+});
 
 const port = process.env.PORT || 3000;
 
