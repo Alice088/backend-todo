@@ -17,10 +17,10 @@ app.get("/users",  (req, res) => {
 });
 
 app.post("/createUser", (req, res) => {
-    const user = {...req.body};
+    const user = req.body;
 
-    res.send({ reqBody: user }).json()
-    console.log(user);
+    res.send({ reqBody: user, truthBody: req.body }).json()
+    console.log(user, req.body);
 
     // connection.query(
     //   `INSERT INTO users (nickname,password, email) VALUES (?, ?, ?)`,
