@@ -1,5 +1,5 @@
 import express from 'express';
-import connection from "./db.js"
+import { connection } from "./db.js"
 const app = express();
 
 app.get('/', (req, res) => {
