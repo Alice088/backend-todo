@@ -2,6 +2,8 @@ import express from 'express';
 import { connection } from "./db.js"
 const app = express();
 
+app.use(express.json());
+
 app.get('/', (req, res) => {
     res.send('Choo Choo! Welcome to your Express app 🚅');
 })
