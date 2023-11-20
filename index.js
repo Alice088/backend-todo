@@ -40,7 +40,7 @@ app.get("/getUser/:userID", (req, res) => {
       });
 });
 
-app.put("/updateNickname/:userID/:newNickname", (req, res) => {
+app.patch("/updateNickname/:userID/:newNickname", (req, res) => {
   const user = { ...req.params };
 
   connection.query(
