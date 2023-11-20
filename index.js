@@ -1,6 +1,7 @@
 import express from 'express';
 import { connection } from "./db.js"
 const app = express();
+const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
@@ -27,7 +28,16 @@ app.post("/createUser", (req, res) => {
       sqlErr => { if(sqlErr) throw sqlErr });
 });
 
-const port = process.env.PORT || 3000;
+app.post("/getUser", (req, res) => {
+    const user = {...req.body};
+
+    connection.query(
+      `SELECT * FROM users WHERE id = ${user.id}`,
+      (sqlErr, sqlRes) => {
+          if(sqlErr) res.status(404).json( { message: "User not found" } )
+          else res.send(sqlRes);
+      });
+});
 
 connection.connect(err => {
     if (err) console.log("no connect", err);
