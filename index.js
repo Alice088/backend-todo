@@ -39,6 +39,15 @@ app.get("/getUser/:userID", (req, res) => {
       });
 });
 
+app.put("/updateNickname/:userID/:newNickname", (req, res) => {
+  const user = { ...req.params };
+
+  connection.query(
+    `UPDATE users SET nickname = ? WHERE id = ?`,
+    [user.newNickname, user.userID],
+    sqlErr => { if(sqlErr) throw sqlErr });
+})
+
 connection.connect(err => {
     if (err) console.log("no connect", err);
     else console.log("Successfully connected to the database.");
