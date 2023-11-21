@@ -1,5 +1,5 @@
 import express from 'express';
-import { connection } from 'db.ts'
+import { connection } from "./db.js"
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -23,7 +23,7 @@ app.post("/createUser", (req, res) => {
     connection.query(
       `INSERT INTO users (nickname,password, email) VALUES (?, ?, ?)`,
       [user.nickname, user.password, user.email],
-      (sqlErr) => {
+      sqlErr => {
         if(sqlErr) res.status(500).json( { message: "Something went wrong" } )
         else res.json({ message: "Successfully" })
       });
@@ -46,7 +46,7 @@ app.patch("/updateNickname/:userID/:newNickname", (req, res) => {
   connection.query(
     `UPDATE users SET nickname = ? WHERE id = ?`,
     [user.newNickname, user.userID],
-    (sqlErr) => {
+    sqlErr => {
       if(sqlErr) {
         res.json({ message: "Something went wrong" })
         throw sqlErr
@@ -58,9 +58,7 @@ app.patch("/updateNickname/:userID/:newNickname", (req, res) => {
 app.delete("/deleteUser/:userID", (req, res) => {
   const user = req.params;
 
-  connection.query(
-    "DELETE FROM users WHERE id = ?", [user.userID],
-    (sqlErr) => {
+  connection.query("DELETE FROM users WHERE id = ?", [user.userID], sqlErr => {
     if(sqlErr) {
       res.json({ message: "Something went wrong" })
       throw sqlErr
@@ -71,7 +69,7 @@ app.delete("/deleteUser/:userID", (req, res) => {
 
 
 //connect and other...
-connection.connect(<T>(err: T) => {
+connection.connect(err => {
     if (err) console.log("no connect", err);
     else console.log("Successfully connected to the database.");
 });
