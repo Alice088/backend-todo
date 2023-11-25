@@ -30,11 +30,11 @@ app.post("/createUser", (req, res) => {
 
 
     connection.query(
-      "INSERT INTO users (nickname,password, email, salt) VALUES (?, ?, ?, ?)",
+      "INSERT INTO users (nickname, password, email, salt) VALUES (?, ?, ?, ?)",
       [user.nickname, passwordHash, user.email, salt],
       sqlErr => {
-        if(sqlErr) res.status(500).json( { message: "Something went wrong" } )
-        else res.json({ message: "Successfully" })
+        if(sqlErr) res.status(500).json( { message: "Something went wrong", err: sqlErr } )
+        else res.json( { message: "Successfully" } )
       });
 });
 
