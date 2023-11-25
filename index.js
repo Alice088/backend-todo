@@ -58,7 +58,6 @@ app.post("/authenticationUser", (req, res) => {
     (sqlErr, sqlRes) => {
       if(sqlErr) {
         res.status(404).json( { message: "User not found", err: sqlErr } )
-        throw sqlErr;
       }
       else {
         const sqlUser = sqlRes.value[0];
