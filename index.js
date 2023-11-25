@@ -1,4 +1,5 @@
 import express from 'express';
+import crypto, { createHash } from "crypto";
 import { connection } from "./db.js"
 const app = express();
 const port = process.env.PORT || 3000;
@@ -20,9 +21,17 @@ app.get("/users",  (req, res) => {
 app.post("/createUser", (req, res) => {
     const user = {...req.body};
 
+    const salt = crypto.randomBytes(16);
+
+    const passwordHash = createHash("sha256")
+      .update(user.password)
+      .update(createHash("sha256").update(salt, "utf8").digest("hex"))
+      .digest("hex");
+
+
     connection.query(
       `INSERT INTO users (nickname,password, email) VALUES (?, ?, ?)`,
-      [user.nickname, user.password, user.email],
+      [user.nickname, passwordHash, user.email],
       sqlErr => {
         if(sqlErr) res.status(500).json( { message: "Something went wrong" } )
         else res.json({ message: "Successfully" })
