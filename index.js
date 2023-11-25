@@ -53,7 +53,7 @@ app.get("/authenticationUser", (req, res) => {
   const user = {...req.body};
 
   connection.query(
-    `SELECT * FROM users WHERE id = ${user.nickname}`,
+    `SELECT * FROM users WHERE nickname = ${user.nickname}`,
     (sqlErr, sqlRes) => {
       if(sqlErr) {
         res.status(404).json({message: "User not found"})
