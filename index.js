@@ -21,7 +21,7 @@ app.get("/users",  (req, res) => {
 app.post("/createUser", (req, res) => {
     const user = {...req.body};
 
-    const salt = crypto.randomBytes(16);
+    const salt = crypto.randomBytes(16).toString('base64');
 
     const passwordHash = createHash("sha256")
       .update(user.password)
