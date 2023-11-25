@@ -33,9 +33,9 @@ app.post("/createUser", (req, res) => {
       "INSERT INTO users (nickname, password, email, salt) VALUES (?, ?, ?, ?)",
       [user.nickname, passwordHash, user.email, salt],
       sqlErr => {
-        if(sqlErr) res.status(500).json( { message: "Something went wrong", err: salt } )
+        if(sqlErr) res.status(500).json( { message: "Something went wrong" })
         else res.json( { message: "Successfully" } )
-      });
+      })
 });
 
 app.get("/getUser/:userID", (req, res) => {
@@ -48,6 +48,34 @@ app.get("/getUser/:userID", (req, res) => {
           else res.json({ data: sqlRes })
       });
 });
+
+app.get("/authenticationUser", (req, res) => {
+  const user = {...req.body};
+
+  connection.query(
+    `SELECT * FROM users WHERE id = ${user.nickname}`,
+    (sqlErr, sqlRes) => {
+      if(sqlErr) {
+        res.status(404).json({message: "User not found"})
+        throw sqlErr;
+      }
+      else {
+        const sqlUser = sqlRes.value[0];
+
+        const passwordHash = createHash("sha256")
+          .update(sqlUser.password)
+          .update(createHash("sha256").update(sqlUser.salt, "utf8").digest("hex"))
+          .digest("hex");
+
+        connection.query(
+          `SELECT * FROM users WHERE password = ${passwordHash}`,
+          (sqlErr2, sqlRes2) => {
+            if(sqlErr2) res.status(404).json({message: "User not found"})
+            else res.json({ data: sqlRes2 });
+          })
+      }
+    });
+})
 
 app.patch("/updateNickname/:userID/:newNickname", (req, res) => {
   const user = { ...req.params };
