@@ -70,7 +70,7 @@ app.get("/authenticationUser", (req, res) => {
         connection.query(
           `SELECT * FROM users WHERE password = ${passwordHash}`,
           (sqlErr2, sqlRes2) => {
-            if(sqlErr2) res.status(404).json({message: "User not found"})
+            if(sqlErr2) res.status(404).json({ message: "Password is uncorrected" })
             else res.json({ data: sqlRes2 });
           })
       }
