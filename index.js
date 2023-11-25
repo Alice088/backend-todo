@@ -49,7 +49,7 @@ app.get("/getUser/:userID", (req, res) => {
       });
 });
 
-app.get("/authenticationUser", (req, res) => {
+app.post("/authenticationUser", (req, res) => {
   const user = {...req.body};
 
   connection.query(
