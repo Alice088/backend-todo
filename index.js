@@ -53,7 +53,8 @@ app.get("/authenticationUser", (req, res) => {
   const user = {...req.body};
 
   connection.query(
-    `SELECT * FROM users WHERE nickname = ${user.nickname}`,
+    `SELECT * FROM users WHERE nickname = ?`,
+    [user.nickname],
     (sqlErr, sqlRes) => {
       if(sqlErr) {
         res.status(404).json( { message: "User not found", err: sqlErr } )
@@ -68,7 +69,8 @@ app.get("/authenticationUser", (req, res) => {
           .digest("hex");
 
         connection.query(
-          `SELECT * FROM users WHERE password = ${passwordHash}`,
+          `SELECT * FROM users WHERE password = ?`,
+          [passwordHash],
           (sqlErr2, sqlRes2) => {
             if(sqlErr2) res.status(404).json({ message: "Password is uncorrected", err: sqlErr2  })
             else res.json({ data: sqlRes2 });
