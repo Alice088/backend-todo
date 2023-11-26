@@ -54,8 +54,8 @@ app.get("/authenticationUser/:nickname/:password", (req, res) => {
     (sqlErr, sqlRes) => {
       if(sqlErr) res.status(404).json( { message: "User not found", err: sqlErr } )
       else {
-        const sqlUser = sqlRes.value[0];
         console.log(sqlRes)
+        const sqlUser = sqlRes;
 
         const passwordHash = createHash("sha256")
           .update(req.params['password'])
