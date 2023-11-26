@@ -49,34 +49,26 @@ app.get("/getUser/:userID", (req, res) => {
       });
 });
 
-app.post("/authenticationUser", (req, res) => {
-  const user = {...req.body};
-
-  connection.query(
-    `SELECT * FROM users WHERE nickname = ?`,
-    [user.nickname],
+app.get("/authenticationUser/:nickname/:password", (req, res) => {
+  connection.query("SELECT password, salt FROM users WHERE nickname = ?", [req.params['nickname']],
     (sqlErr, sqlRes) => {
-      if(sqlErr) {
-        res.status(404).json( { message: "User not found", err: sqlErr } )
-      }
+      if(sqlErr) res.status(404).json( { message: "User not found", err: sqlErr } )
       else {
         const sqlUser = sqlRes.value[0];
+        console.log(sqlRes)
 
         const passwordHash = createHash("sha256")
-          .update(sqlUser.password)
+          .update(req.params['password'])
           .update(createHash("sha256").update(sqlUser.salt, "utf8").digest("hex"))
           .digest("hex");
 
-        connection.query(
-          `SELECT * FROM users WHERE password = ?`,
-          [passwordHash],
-          (sqlErr2, sqlRes2) => {
-            if(sqlErr2) res.status(404).json({ message: "Password is uncorrected", err: sqlErr2  })
-            else res.json({ data: sqlRes2 });
-          })
+        if(passwordHash === sqlUser.password) res.status(200).json({ result: true })
+        else res.status(401).json({ result: false })
       }
-    });
+    }
+  )
 })
+
 
 app.patch("/updateNickname/:userID/:newNickname", (req, res) => {
   const user = { ...req.params };
