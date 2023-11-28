@@ -62,7 +62,7 @@ app.get("/authenticationUser/:nickname/:password", (req, res) => {
           .digest("hex");
 
         if(passwordHash === sqlUser.password) res.status(200).json({ result: true })
-        else res.status(401).json({ result: false })
+        else res.status(401).json({ message: "Password is wrong", result: false })
       }
     }
   )
