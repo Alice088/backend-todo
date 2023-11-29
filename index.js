@@ -64,7 +64,7 @@ app.get("/authenticationUser/:nickname/:password", (req, res) => {
           .update(createHash("sha256").update(sqlUser.salt, "utf8").digest("hex"))
           .digest("hex");
 
-        if(passwordHash === sqlUser.password) res.status(200).json({ result: true })
+        if(passwordHash === sqlUser.password) res.status(200).json({ result: true, id: sqlUser.id })
         else res.status(401).json({ message: "Password is wrong", result: false })
       }
     }
