@@ -53,12 +53,11 @@ app.get("/authenticationUser/:nickname/:password", (req, res) => {
   connection.query("SELECT * FROM users WHERE nickname Like ?", req.params['nickname'],
     (sqlErr, sqlRes) => {
       if(sqlErr) { 
-          res.status(503).json( { message: "Something went wrong", result: false, err: sqlErr, t: typeof req.params['nickname']} )
+          res.status(503).json( { message: "Something went wrong", result: false } )
       } else if (sqlRes.lenght === 0) {
           res.status(404).json( { message: "User not found", result: false } )
       } else {
-        const sqlUser = sqlRes;
-        console.log(sqlUser, req.params['nickname'], sqlErr, !!sqlErr)
+        const sqlUser = sqlRes[0];
 
         const passwordHash = createHash("sha256")
           .update(req.params['password'])
