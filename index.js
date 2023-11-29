@@ -54,7 +54,7 @@ app.get("/authenticationUser/:nickname/:password", (req, res) => {
     (sqlErr, sqlRes) => {
       if(sqlErr) { 
           res.status(503).json( { message: "Something went wrong", result: false } )
-      } else if (sqlRes.lenght === 0) {
+      } else if (sqlRes.length === 0) {
           res.status(404).json( { message: "User not found", result: false } )
       } else {
         const sqlUser = sqlRes[0];
