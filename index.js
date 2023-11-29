@@ -53,7 +53,7 @@ app.get("/authenticationUser/:nickname/:password", (req, res) => {
   connection.query(`SELECT * FROM users WHERE nickname Like ${req.params['nickname']}`,
     (sqlErr, sqlRes) => {
       if(sqlErr) { 
-          res.status(503).json( { message: "Something went wrong", result: false } )
+          res.status(503).json( { message: "Something went wrong", result: false, err: sqlErr } )
       } else if (sqlRes.lenght === 0) {
           res.status(404).json( { message: "User not found", result: false } )
       } else {
