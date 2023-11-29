@@ -50,10 +50,10 @@ app.get("/getUser/:userID", (req, res) => {
 });
 
 app.get("/authenticationUser/:nickname/:password", (req, res) => {
-  connection.query("SELECT * FROM users WHERE nickname Like ?" [req.params['nickname'].toString()],
+  connection.query("SELECT * FROM users WHERE nickname Like ?", req.params['nickname'],
     (sqlErr, sqlRes) => {
       if(sqlErr) { 
-          res.status(503).json( { message: "Something went wrong", result: false, err: sqlErr } )
+          res.status(503).json( { message: "Something went wrong", result: false, err: sqlErr, t: typeof req.params['nickname']} )
       } else if (sqlRes.lenght === 0) {
           res.status(404).json( { message: "User not found", result: false } )
       } else {
