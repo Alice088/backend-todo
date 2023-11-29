@@ -58,7 +58,7 @@ app.get("/authenticationUser/:nickname/:password", (req, res) => {
       }
       else {
         const sqlUser = sqlRes;
-        console.log(sqlUser)
+        console.log(sqlUser, req.params['nickname'])
 
         const passwordHash = createHash("sha256")
           .update(req.params['password'])
