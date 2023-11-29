@@ -52,7 +52,10 @@ app.get("/getUser/:userID", (req, res) => {
 app.get("/authenticationUser/:nickname/:password", (req, res) => {
   connection.query("SELECT password, salt FROM users WHERE nickname = ?", [req.params['nickname']],
     (sqlErr, sqlRes) => {
-      if(sqlErr) res.status(404).json( { message: "User not found", result: false } )
+      if(sqlErr) { 
+          res.status(404).json( { message: "User not found", result: false } )
+          return;
+      }
       else {
         const sqlUser = sqlRes;
         console.log(sqlUser)
