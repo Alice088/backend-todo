@@ -83,7 +83,7 @@ app.get("/getUserID/:nickname/:email", (req, res) => {
       } else {
         const sqlUser = sqlRes[0];
 
-        res.status(200).json({ result: true })
+        res.status(200).json({ result: true, id: sqlUser.id })
       }
     });
 })
