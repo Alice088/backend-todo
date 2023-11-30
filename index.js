@@ -38,7 +38,7 @@ app.post("/createUser", (req, res) => {
       })
 });
 
-app.get("/getUser/:userID", (req, res) => {
+app.get("/getUserByID/:userID", (req, res) => {
     const user = req.params;
 
     connection.query(
@@ -71,19 +71,20 @@ app.get("/authenticationUser/:nickname/:password", (req, res) => {
   )
 })
 
-
-app.patch("/updateNickname/:userID/:newNickname", (req, res) => {
-  const user = { ...req.params };
-
+app.get("/getUserID/:nickname/:email", (req, res) => {
   connection.query(
-    `UPDATE users SET nickname = ? WHERE id = ?`,
-    [user.newNickname, user.userID],
-    sqlErr => {
+    "SELECT id FROM users WHERE nickname LIKE ? AND email LIKE ?",
+    [req.params['nickname'], req.params['email']],
+    (sqlErr, sqlRes) => {
       if(sqlErr) {
-        res.json({ message: "Something went wrong" })
-        throw sqlErr
+        res.status(503).json( { message: "Something went wrong", result: false } )
+      } else if (sqlRes.length === 0) {
+        res.status(404).json( { message: "User not found", result: false } )
+      } else {
+        const sqlUser = sqlRes[0];
+
+        res.status(200).json({ result: true })
       }
-      else res.json({ message: "successfully" })
     });
 })
 
@@ -98,7 +99,6 @@ app.delete("/deleteUser/:userID", (req, res) => {
     else res.json({ message: "successfully" })
   })
 })
-
 
 //connect and other...
 connection.connect(err => {
